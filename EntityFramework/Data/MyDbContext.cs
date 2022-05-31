@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EntityFramework.Data
 {
-    public class MyContext : DbContext
+    public class MyDbContext : DbContext
     {
         public const string conectionString = @"Data Source = (localdb)\ProjectsV13;Initial Catalog = StoreDB;";
         public DbSet<Product> Products { get; set; }

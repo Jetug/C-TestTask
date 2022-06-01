@@ -10,7 +10,7 @@ namespace EntityFramework.Data
 {
     public class MyDbContext : DbContext
     {
-        private Random random = new Random();
+        private Random random = new();
         private const int quantity = 50;
 
         public const string conectionString = @"Data Source = (localdb)\MSSQLSERVER_DEV;Initial Catalog = StoreDB;";
@@ -31,6 +31,37 @@ namespace EntityFramework.Data
             LoadBuyers();
         }
 
+        public DbSet<T> GetByType<T>(T model) where T : class
+        {
+            return model switch
+            {
+                Product => Products as DbSet<T>,
+                Buyer => Buyers as DbSet<T>,
+                Sale => Sales as DbSet<T>,
+                ProvidedProduct => ProvidedProducts as DbSet<T>,
+                SaleData => SalesData as DbSet<T>,
+                SalesPoint => SalesPoints as DbSet<T>,
+                _ => null,
+            };
+        }
+
+        public void AddNSave<T>(T model) where T : class
+        {
+            GetByType(model).Add(model);
+            SaveChanges();
+        }
+
+        public void UpdateNSave<T>(T model) where T : class
+        {
+            GetByType(model).Update(model);
+            SaveChanges();
+        }
+
+        public void DeleteNSave<T>(T model) where T : class
+        {
+            GetByType(model).Remove(model);
+            SaveChanges();
+        }
 
         public Sale GetSale(int id) => Sales.Find(id);
 
@@ -38,11 +69,25 @@ namespace EntityFramework.Data
         
         public Buyer GetBuyer (int id) => Buyers.Find(id);
 
+        private void Load(Action action)
+        {
+            for (int i = 0; i < quantity; i++)
+                action();
+            SaveChanges();
+        }
+
+        private void Detach(object item)
+        {
+            Entry(item).State = EntityState.Detached;
+        }
+
         private void LoadProducts()
         {
             Load(() =>
             {
-                Products.Add(new Product($"Product {random.Next(1000)}", random.Next(1000)));
+                var product = new Product($"Product {random.Next(1000)}", random.Next(1000));
+                Products.Add(product);
+                Detach(product);
             });
         }
 
@@ -51,7 +96,9 @@ namespace EntityFramework.Data
             Load(() =>
             {
                 Product product = Products.Find(random.Next(quantity));
-                ProvidedProducts.Add(new ProvidedProduct(product, random.Next(1000)));
+                var item = new ProvidedProduct(product, random.Next(1000));
+                ProvidedProducts.Add(item);
+                Detach(item);
             });
         }
 
@@ -60,7 +107,9 @@ namespace EntityFramework.Data
             Load(() =>
             {
                 Product product = Products.Find(random.Next(quantity));
-                SalesData.Add(new SaleData(product, random.Next(1000), random.Next(10000)));
+                var item = new SaleData(product, random.Next(1000), random.Next(10000));
+                SalesData.Add(item);
+                Detach(item);
             });
         }
 
@@ -69,7 +118,9 @@ namespace EntityFramework.Data
             Load(() =>
             {
                 var providedProducts = GetRandomProvidedProducts();
-                SalesPoints.Add(new SalesPoint($"SalesPoint {random.Next(1000)}", providedProducts));
+                var item = new SalesPoint($"SalesPoint {random.Next(1000)}", providedProducts);
+                SalesPoints.Add(item);
+                Detach(item);
             });
         }
 
@@ -78,7 +129,9 @@ namespace EntityFramework.Data
             Load(() => {
                 Buyer buyer = Buyers.Find(random.Next(quantity));
                 SalesPoint salesPoint = SalesPoints.Find(random.Next(quantity));
-                Sales.Add(new Sale(DateTime.Today, DateTime.Now, salesPoint, buyer, GetRandomSalesData(), random.Next(10000)));
+                var item = new Sale(DateTime.Today, DateTime.Now, salesPoint, buyer, GetRandomSalesData(), random.Next(10000));
+                Sales.Add(item);
+                Detach(item);
             });
         }
 
@@ -86,15 +139,10 @@ namespace EntityFramework.Data
         {
             Load(() =>
             {
-                Buyers.Add(new Buyer($"Buyer {random.Next(1000)}", GetRandomSales()));
+                var item = new Buyer($"Buyer {random.Next(1000)}", GetRandomSales());
+                Buyers.Add(item);
+                //Detach(item);
             });
-        }
-
-        private void Load(Action action)
-        {
-            for (int i = 0; i < quantity; i++)
-                action();
-            SaveChanges();
         }
 
         private List<ProvidedProduct> GetRandomProvidedProducts()

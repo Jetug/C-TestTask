@@ -1,5 +1,6 @@
 ﻿using EntityFramework.Data;
 using EntityFramework.Data.Tables;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -18,9 +19,14 @@ namespace WebApi.Model
         {
             var salePoints = dbContext.SalesPoints;
 
+            if (salePoints == null) 
+                return false;
+
             foreach (var salesPoint in salePoints)
             {
                 var providedProducts = salesPoint.ProvidedProducts;
+
+                if (providedProducts == null) continue;
 
                 foreach (var providedProduct in providedProducts)
                 {
@@ -34,6 +40,9 @@ namespace WebApi.Model
                         }
 
                         Product product = dbContext.Products.Find(productId);
+
+                        if (product == null) continue;
+
                         float productIdAmount = product.Price * quantity;
                         SaleData saleData = new(product, quantity, productIdAmount);
                         Sale sale = CreateSale(salesPoint.Id, userId, new List<SaleData> { saleData }, productIdAmount);
@@ -44,7 +53,9 @@ namespace WebApi.Model
                         if (userId != null)
                         {
                             Buyer buyer = dbContext.Buyers.Find(userId);
-                            buyer.SaleIds.Add(sale);
+                            if (buyer != null)
+                                buyer.SaleIds.Add(sale);
+                            else return false;
                         }
 
                         return true;

@@ -1,22 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+﻿using EntityFramework.Data.Tables;
 using EntityFramework.Data;
-using EntityFramework.Data.Tables;
+using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace WebApi.Controllers
 {
+    [Route("api/[controller]")]
     [ApiController]
-    [Route("[controller]")]
-    public class BuyersController : Controller
+    public class SalesPointsController : ControllerBase
     {
         private readonly MyDbContext context;
 
-        public BuyersController(MyDbContext context)
+        public SalesPointsController(MyDbContext context)
         {
             this.context = context;
         }
@@ -25,12 +20,12 @@ namespace WebApi.Controllers
         [Route("all")]
         public IActionResult GetAllGadtets()
         {
-            return Ok(context.GetTableByType(new Buyer()).ToList());
+            return Ok(context.GetTableByType(new SalesPoint()).ToList());
         }
 
         [HttpPost]
         [Route("add")]
-        public IActionResult CreateBuyer(Buyer model)
+        public IActionResult CreateSalesPoint(SalesPoint model)
         {
             context.AddNSave(model);
             return Ok(model.Id);
@@ -38,7 +33,7 @@ namespace WebApi.Controllers
 
         [HttpPut]
         [Route("update")]
-        public IActionResult UpdateBuyer(Buyer model)
+        public IActionResult UpdateSalesPoint(SalesPoint model)
         {
             context.UpdateNSave(model);
             return NoContent();
@@ -46,9 +41,9 @@ namespace WebApi.Controllers
 
         [HttpDelete]
         [Route("delete/{id}")]
-        public IActionResult DeleteBuyer(int id)
+        public IActionResult DeleteSalesPoint(int id)
         {
-            var model = context.Buyers.Find(id);
+            var model = context.SalesPoints.Find(id);
             if (model == null)
                 return NotFound();
 

@@ -10,10 +10,6 @@ namespace EntityFramework.Data
 {
     public class MyDbContext : DbContext
     {
-        private Random random = new();
-        private const int quantity = 50;
-
-        public const string conectionString = @"Data Source = (localdb)\MSSQLSERVER_DEV;Initial Catalog = StoreDB;";
         public DbSet<Product> Products { get; set; }
         public DbSet<SalesPoint> SalesPoints { get; set; }
         public DbSet<Buyer> Buyers { get; set; }
@@ -23,15 +19,11 @@ namespace EntityFramework.Data
 
         public MyDbContext(DbContextOptions options) : base(options)
         {
-            LoadProducts();
-            LoadProvidedProducts();
-            LoadSalesData();
-            LoadSalesPoints();
-            LoadSales();
-            LoadBuyers();
+            DataGenerator dataGen = new(this);
+            dataGen.Run();
         }
 
-        public DbSet<T> GetByType<T>(T model) where T : class
+        public DbSet<T> GetTableByType<T>(T model) where T : class
         {
             return model switch
             {
@@ -45,21 +37,26 @@ namespace EntityFramework.Data
             };
         }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.EnableSensitiveDataLogging();
+        }
+
         public void AddNSave<T>(T model) where T : class
         {
-            GetByType(model).Add(model);
+            GetTableByType(model).Add(model);
             SaveChanges();
         }
 
         public void UpdateNSave<T>(T model) where T : class
         {
-            GetByType(model).Update(model);
+            GetTableByType(model).Update(model);
             SaveChanges();
         }
 
         public void DeleteNSave<T>(T model) where T : class
         {
-            GetByType(model).Remove(model);
+            GetTableByType(model).Remove(model);
             SaveChanges();
         }
 
@@ -68,129 +65,5 @@ namespace EntityFramework.Data
         public SalesPoint GetSalesPoint(int id) => SalesPoints.Find(id);
         
         public Buyer GetBuyer (int id) => Buyers.Find(id);
-
-        private void Load(Action action)
-        {
-            for (int i = 0; i < quantity; i++)
-                action();
-            SaveChanges();
-        }
-
-        private void Detach(object item)
-        {
-            Entry(item).State = EntityState.Detached;
-        }
-
-        private void LoadProducts()
-        {
-            Load(() =>
-            {
-                var product = new Product($"Product {random.Next(1000)}", random.Next(1000));
-                Products.Add(product);
-                Detach(product);
-            });
-        }
-
-        private void LoadProvidedProducts()
-        {
-            Load(() =>
-            {
-                Product product = Products.Find(random.Next(quantity));
-                var item = new ProvidedProduct(product, random.Next(1000));
-                ProvidedProducts.Add(item);
-                Detach(item);
-            });
-        }
-
-        private void LoadSalesData()
-        {
-            Load(() =>
-            {
-                Product product = Products.Find(random.Next(quantity));
-                var item = new SaleData(product, random.Next(1000), random.Next(10000));
-                SalesData.Add(item);
-                Detach(item);
-            });
-        }
-
-        private void LoadSalesPoints()
-        {
-            Load(() =>
-            {
-                var providedProducts = GetRandomProvidedProducts();
-                var item = new SalesPoint($"SalesPoint {random.Next(1000)}", providedProducts);
-                SalesPoints.Add(item);
-                Detach(item);
-            });
-        }
-
-        private void LoadSales()
-        {
-            Load(() => {
-                Buyer buyer = Buyers.Find(random.Next(quantity));
-                SalesPoint salesPoint = SalesPoints.Find(random.Next(quantity));
-                var item = new Sale(DateTime.Today, DateTime.Now, salesPoint, buyer, GetRandomSalesData(), random.Next(10000));
-                Sales.Add(item);
-                Detach(item);
-            });
-        }
-
-        private void LoadBuyers()
-        {
-            Load(() =>
-            {
-                var item = new Buyer($"Buyer {random.Next(1000)}", GetRandomSales());
-                Buyers.Add(item);
-                //Detach(item);
-            });
-        }
-
-        private List<ProvidedProduct> GetRandomProvidedProducts()
-        {
-            List<ProvidedProduct> products = new();
-            int quan = random.Next(quantity);
-            for (int i = 0; i < quan; i++)
-            {
-                var item = ProvidedProducts.Find(i);
-                if (item != null)
-                    products.Add(item);
-            }
-            return products;
-        }
-
-        private List<SaleData> GetRandomSalesData()
-        {
-            List<SaleData> sales = new();
-
-            int quan = random.Next(quantity);
-            for (int i = 0; i < quan; i++)
-            {
-                var item = SalesData.Find(i);
-                if (item != null)
-                    sales.Add(item);
-            }
-            return sales;
-        }
-
-        private List<Sale> GetRandomSales()
-        {
-            List<Sale> sales = new();
-
-            int quan = random.Next(quantity);
-            for (int i = 0; i < quan; i++)
-            {
-                var item = Sales.Find(i);
-                if (item != null)
-                    sales.Add(item);
-            }
-            return sales;
-        }
-
-        private Product getRandomProduct() => Products.Find(random.Next(quantity));
-
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder.UseSqlServer(conectionString);
-        //}
     }
 }

@@ -11,13 +11,13 @@ namespace WebApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class SaleController : ControllerBase
+    public class MainController : ControllerBase
     {
         //private readonly ILogger<MyController> _logger;
         private readonly MyDbContext myDbContext;
         private readonly Operations operations;
 
-        public SaleController(MyDbContext dbContext)
+        public MainController(MyDbContext dbContext)
         {
             myDbContext = dbContext;
             operations = new Operations(dbContext);

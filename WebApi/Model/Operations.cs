@@ -7,16 +7,16 @@ namespace WebApi.Model
 {
     public class Operations
     {
-        private readonly MyDbContext myDbContext;
+        private readonly MyDbContext dbContext;
 
-        public Operations(MyDbContext myDbContext)
+        public Operations(MyDbContext dbContext)
         {
-            this.myDbContext = myDbContext;
+            this.dbContext = dbContext;
         }
 
         public bool Sale(int? userId, int productId, int quantity)
         {
-            var salePoints = myDbContext.SalesPoints;
+            var salePoints = dbContext.SalesPoints;
 
             foreach (var salesPoint in salePoints)
             {
@@ -33,17 +33,17 @@ namespace WebApi.Model
                             providedProducts.Remove(providedProduct);
                         }
 
-                        var product = myDbContext.Products.Find(productId);
-                        var productIdAmount = product.Price * quantity;
-                        var saleData = new SaleData(productId, quantity, productIdAmount);
-                        var sale = CreateSale(salesPoint.Id, userId, new List<SaleData> { saleData }, productIdAmount);
+                        Product product = dbContext.Products.Find(productId);
+                        float productIdAmount = product.Price * quantity;
+                        SaleData saleData = new(product, quantity, productIdAmount);
+                        Sale sale = CreateSale(salesPoint.Id, userId, new List<SaleData> { saleData }, productIdAmount);
 
-                        myDbContext.Sales.Add(sale);
-                        myDbContext.SaveChanges();
+                        dbContext.Sales.Add(sale);
+                        dbContext.SaveChanges();
 
                         if (userId != null)
                         {
-                            var buyer = myDbContext.Buyers.Find(userId);
+                            Buyer buyer = dbContext.Buyers.Find(userId);
                             buyer.SaleIds.Add(sale);
                         }
 
@@ -56,7 +56,15 @@ namespace WebApi.Model
 
         private Sale CreateSale(int salesPointId, int? bayerId, List<SaleData> salesData, float totalAmount)
         {
-            return new Sale(System.DateTime.Now, System.DateTime.Today, salesPointId, bayerId, salesData, totalAmount);
+            SalesPoint salesPoint = dbContext.GetSalesPoint(salesPointId);
+
+            Buyer buyer = null;
+            if (bayerId != null)
+            {
+                buyer = dbContext.GetBuyer((int)bayerId);
+            }
+
+            return new Sale(System.DateTime.Now, System.DateTime.Today, salesPoint, buyer, salesData, totalAmount);
         }
     }
 }

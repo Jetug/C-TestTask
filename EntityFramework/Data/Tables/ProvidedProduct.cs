@@ -10,9 +10,24 @@ namespace EntityFramework.Data.Tables
 {
     public class ProvidedProduct
     {
+        public ProvidedProduct(){}
+
+        //public ProvidedProduct(int productId, int productQuantity)
+        //{
+        //    ProductId = productId;
+        //    ProductQuantity = productQuantity;
+        //}
+
+        public ProvidedProduct(Product product, int productQuantity)
+        {
+            Product = product;
+            ProductQuantity = productQuantity;
+        }
+
         public int Id { get; set; }
-        [ForeignKey(Product.tableName)]
         public int ProductId { get; set; }
+        public Product Product { get; set; }
         public int ProductQuantity { get; set; }
+        public List<SalesPoint> SalesPoints { get; set; }
     }
 }

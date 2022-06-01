@@ -63,3 +63,4 @@ C:\Users\Jetug\YandexDisk\Projects\C#\TestTask\EntityFramework\bin\Debug\net5.0\
 C:\Users\Jetug\YandexDisk\Projects\C#\TestTask\EntityFramework\bin\Debug\net5.0\runtimes\win\lib\netcoreapp3.0\System.Windows.Extensions.dll
 C:\Users\Jetug\YandexDisk\Projects\C#\TestTask\EntityFramework\obj\Debug\net5.0\EntityFramework.csproj.CopyComplete
 C:\Users\Jetug\YandexDisk\Projects\C#\TestTask\EntityFramework\obj\Debug\net5.0\refint\EntityFramework.dll
+C:\Users\Jetug\YandexDisk\Projects\C#\TestTask\EntityFramework\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.InMemory.dll

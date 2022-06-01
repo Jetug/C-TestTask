@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "S0aNd/3dWNoOdiy7mDUawWYNYncfq2jXZGidanC95fEPKefllmeo7Wd4JcFbevF5Xrzz6kHGYbuSk+F4mpK7TQ==",
+  "dgSpecHash": "2sp1Q6uKMigEgm85GBqEw+Ken64aUorne3GhewknQFknfr/FK+nYpWQ8cKU4uxnVrrOSoGxSwTjO5gTdnndZVA==",
   "success": true,
   "projectFilePath": "C:\\Users\\Jetug\\YandexDisk\\Projects\\C#\\TestTask\\EntityFramework\\EntityFramework.csproj",
   "expectedPackageFiles": [
@@ -12,6 +12,7 @@
     "C:\\Users\\Jetug\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\5.0.17\\microsoft.entityframeworkcore.abstractions.5.0.17.nupkg.sha512",
     "C:\\Users\\Jetug\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\5.0.17\\microsoft.entityframeworkcore.analyzers.5.0.17.nupkg.sha512",
     "C:\\Users\\Jetug\\.nuget\\packages\\microsoft.entityframeworkcore.design\\5.0.17\\microsoft.entityframeworkcore.design.5.0.17.nupkg.sha512",
+    "C:\\Users\\Jetug\\.nuget\\packages\\microsoft.entityframeworkcore.inmemory\\5.0.17\\microsoft.entityframeworkcore.inmemory.5.0.17.nupkg.sha512",
     "C:\\Users\\Jetug\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\5.0.17\\microsoft.entityframeworkcore.relational.5.0.17.nupkg.sha512",
     "C:\\Users\\Jetug\\.nuget\\packages\\microsoft.entityframeworkcore.sqlserver\\5.0.17\\microsoft.entityframeworkcore.sqlserver.5.0.17.nupkg.sha512",
     "C:\\Users\\Jetug\\.nuget\\packages\\microsoft.entityframeworkcore.tools\\5.0.17\\microsoft.entityframeworkcore.tools.5.0.17.nupkg.sha512",

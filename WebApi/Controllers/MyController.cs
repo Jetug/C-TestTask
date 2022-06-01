@@ -30,6 +30,7 @@ namespace WebApi.Controllers
         //}
 
         [HttpPost]
+        [Route("Sale")]
         public bool Sale(int? userId, int productId, int quantity)
         {
             return operations.Sale(userId, productId, quantity);

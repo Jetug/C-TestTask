@@ -12,25 +12,36 @@ namespace EntityFramework.Data.Tables
     {
         public Sale(){}
 
-        public Sale(DateTime date, DateTime time, int salesPointId, int? bayerId, List<SaleData> salesData, float totalAmount)
+        //public Sale(DateTime date, DateTime time, int salesPointId, int? bayerId, List<SaleData> salesData, float totalAmount)
+        //{
+        //    Date = date;
+        //    Time = time;
+        //    SalesPointId = salesPointId;
+        //    BayerId = bayerId;
+        //    SalesData = salesData;
+        //    TotalAmount = totalAmount;
+        //}
+
+        public Sale(DateTime date, DateTime time, SalesPoint salesPoint, Buyer buyer, List<SaleData> salesData, float totalAmount)
         {
             Date = date;
             Time = time;
-            SalesPointId = salesPointId;
-            BayerId = bayerId;
+            SalesPoint = salesPoint;
+            Buyer = buyer;
             SalesData = salesData;
             TotalAmount = totalAmount;
-            string st = typeof(SalesPoint).Name;
         }
-        
 
         public int Id { get; set; }
         public DateTime Date { get; set; }
         public DateTime Time { get; set; }
-        [ForeignKey(SalesPoint.tableName)]
+
         public int SalesPointId { get; set; }
-        [ForeignKey(Buyer.tableName)]
+        public SalesPoint SalesPoint { get; set; }
+
         public int? BayerId { get; set; }
+        public Buyer Buyer { get; set; }
+
         public List<SaleData> SalesData { get; set; }
         public float TotalAmount { get; set; }
     }

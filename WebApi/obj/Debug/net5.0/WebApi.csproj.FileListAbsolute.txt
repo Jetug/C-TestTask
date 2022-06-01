@@ -62,3 +62,4 @@ C:\Users\Jetug\YandexDisk\Projects\C#\TestTask\WebApi\obj\Debug\net5.0\refint\We
 C:\Users\Jetug\YandexDisk\Projects\C#\TestTask\WebApi\obj\Debug\net5.0\WebApi.pdb
 C:\Users\Jetug\YandexDisk\Projects\C#\TestTask\WebApi\obj\Debug\net5.0\WebApi.genruntimeconfig.cache
 C:\Users\Jetug\YandexDisk\Projects\C#\TestTask\WebApi\obj\Debug\net5.0\ref\WebApi.dll
+C:\Users\Jetug\YandexDisk\Projects\C#\TestTask\WebApi\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.InMemory.dll

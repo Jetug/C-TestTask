@@ -8,10 +8,19 @@ namespace EntityFramework.Data.Tables
 {
     public class Product
     {
-        public const string tableName = "Product"; 
+        public const string tableName = "Product";
+
+        public Product(){}
+
+        public Product(string name, float price)
+        {
+            Name = name;
+            Price = price;
+        }
 
         public int Id { get; set; }
         public string Name { get; set; }
         public float Price { get; set; }
+        public ProvidedProduct ProvidedProduct { get; set; }
     }
 }

@@ -17,7 +17,7 @@ namespace WebApi.Controllers
     {
         private readonly MyDbContext context;
 
-        public BuyersController(MyDbContext context, ILogger logger)
+        public BuyersController(MyDbContext context)
         {
             this.context = context;
         }

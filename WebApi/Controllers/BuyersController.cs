@@ -16,12 +16,10 @@ namespace WebApi.Controllers
     public class BuyersController : Controller
     {
         private readonly MyDbContext context;
-        private readonly ILogger logger;
 
         public BuyersController(MyDbContext context, ILogger logger)
         {
             this.context = context;
-            this.logger = logger;
         }
 
         [HttpGet]

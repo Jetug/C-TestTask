@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EntityFramework.Data;
 using EntityFramework.Data.Tables;
+using Microsoft.Extensions.Logging;
 
 namespace WebApi.Controllers
 {
@@ -15,16 +16,19 @@ namespace WebApi.Controllers
     public class BuyersController : Controller
     {
         private readonly MyDbContext context;
+        private readonly ILogger logger;
 
-        public BuyersController(MyDbContext context)
+        public BuyersController(MyDbContext context, ILogger logger)
         {
             this.context = context;
+            this.logger = logger;
         }
 
         [HttpGet]
         [Route("all")]
-        public IActionResult GetAllGadtets()
+        public IActionResult GetAllBuyers()
         {
+            logger
             return Ok(context.GetTableByType(new Buyer()).ToList());
         }
 

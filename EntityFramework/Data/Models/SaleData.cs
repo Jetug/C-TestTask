@@ -11,13 +11,6 @@ namespace EntityFramework.Data.Tables
     {
         public SaleData(){}
 
-        //public SaleData(int productId, int productQuantity, float productIdAmount)
-        //{
-        //    ProductId = productId;
-        //    ProductQuantity = productQuantity;
-        //    ProductIdAmount = productIdAmount;
-        //}
-
         public SaleData(Product product, int productQuantity, float productIdAmount)
         {
             Product = product;

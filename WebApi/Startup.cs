@@ -62,6 +62,16 @@ namespace WebApi
             {
                 endpoints.MapControllers();
             });
+
+            var scope = app.ApplicationServices.CreateScope();
+            var context = scope.ServiceProvider.GetService<MyDbContext>();
+            GenerateTestData(context);
+        }
+
+        public static void GenerateTestData(MyDbContext context)
+        {
+            var generator = new DataGenerator(context);
+            generator.Run();
         }
     }
 }

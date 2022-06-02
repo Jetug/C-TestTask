@@ -38,7 +38,7 @@ namespace EntityFramework.Data
 
         private void Detach(object item)
         {
-            context.Entry(item).State = EntityState.Added;
+            //context.Entry(item).State = EntityState.Added;
         }
 
         private void LoadProducts()
@@ -55,7 +55,7 @@ namespace EntityFramework.Data
         {
             Load(() =>
             {
-                Product product = context.Products.Find(random.Next(quantity));
+                Product product = getRandomProduct();
                 var item = new ProvidedProduct(product, random.Next(1000));
                 context.ProvidedProducts.Add(item);
                 Detach(item);
@@ -66,7 +66,7 @@ namespace EntityFramework.Data
         {
             Load(() =>
             {
-                Product product = context.Products.Find(random.Next(quantity));
+                Product product = getRandomProduct();
                 var item = new SaleData(product, random.Next(1000), random.Next(10000));
                 context.SalesData.Add(item);
                 Detach(item);
@@ -101,7 +101,7 @@ namespace EntityFramework.Data
             {
                 var item = new Buyer($"Buyer {random.Next(1000)}", GetRandomSales());
                 context.Buyers.Add(item);
-                context.Entry<Buyer>(item).State = EntityState.Added;
+                //context.Entry<Buyer>(item).State = EntityState.Added;
                 //Detach(item);
             });
         }

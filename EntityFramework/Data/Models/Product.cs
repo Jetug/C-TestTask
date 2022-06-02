@@ -8,8 +8,6 @@ namespace EntityFramework.Data.Tables
 {
     public class Product
     {
-        public const string tableName = "Product";
-
         public Product(){}
 
         public Product(string name, float price)

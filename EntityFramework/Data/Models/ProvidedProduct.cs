@@ -12,12 +12,6 @@ namespace EntityFramework.Data.Tables
     {
         public ProvidedProduct(){}
 
-        //public ProvidedProduct(int productId, int productQuantity)
-        //{
-        //    ProductId = productId;
-        //    ProductQuantity = productQuantity;
-        //}
-
         public ProvidedProduct(Product product, int productQuantity)
         {
             Product = product;

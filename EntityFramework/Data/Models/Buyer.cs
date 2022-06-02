@@ -8,8 +8,6 @@ namespace EntityFramework.Data.Tables
 {
     public class Buyer
     {
-        public const string tableName = "Buyer";
-
         public Buyer() { }
 
         public Buyer(string name, List<Sale> saleIds)

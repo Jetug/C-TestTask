@@ -17,11 +17,7 @@ namespace EntityFramework.Data
         public DbSet<ProvidedProduct> ProvidedProducts { get; set; }
         public DbSet<SaleData> SalesData { get; set; }
 
-        public MyDbContext(DbContextOptions options) : base(options)
-        {
-            DataGenerator dataGen = new(this);
-            dataGen.Run();
-        }
+        public MyDbContext(DbContextOptions options) : base(options){}
 
         public DbSet<T> GetTableByType<T>(T model) where T : class
         {

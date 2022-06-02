@@ -8,8 +8,6 @@ namespace EntityFramework.Data.Tables
 {
     public class SalesPoint
     {
-        public const string tableName = "SalesPoint";
-
         public SalesPoint(){}
 
         public SalesPoint(string name, List<ProvidedProduct> providedProducts)

@@ -12,16 +12,6 @@ namespace EntityFramework.Data.Tables
     {
         public Sale(){}
 
-        //public Sale(DateTime date, DateTime time, int salesPointId, int? bayerId, List<SaleData> salesData, float totalAmount)
-        //{
-        //    Date = date;
-        //    Time = time;
-        //    SalesPointId = salesPointId;
-        //    BayerId = bayerId;
-        //    SalesData = salesData;
-        //    TotalAmount = totalAmount;
-        //}
-
         public Sale(DateTime date, DateTime time, SalesPoint salesPoint, Buyer buyer, List<SaleData> salesData, float totalAmount)
         {
             Date = date;

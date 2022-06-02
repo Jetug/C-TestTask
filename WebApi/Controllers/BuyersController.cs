@@ -28,7 +28,6 @@ namespace WebApi.Controllers
         [Route("all")]
         public IActionResult GetAllBuyers()
         {
-            logger
             return Ok(context.GetTableByType(new Buyer()).ToList());
         }
 

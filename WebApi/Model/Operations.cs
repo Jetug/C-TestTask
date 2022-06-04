@@ -33,30 +33,15 @@ namespace WebApi.Model
                     if(providedProduct.ProductId == productId && providedProduct.ProductQuantity >= quantity)
                     {
                         providedProduct.ProductQuantity -= quantity;
-
-                        if (providedProduct.ProductQuantity == 0)
-                        {
-                            providedProducts.Remove(providedProduct);
-                        }
-
                         Product product = dbContext.Products.Find(productId);
 
                         if (product == null) continue;
 
                         float productIdAmount = product.Price * quantity;
                         SaleData saleData = new(product, quantity, productIdAmount);
-                        Sale sale = CreateSale(salesPoint.Id, userId, new List<SaleData> { saleData }, productIdAmount);
-
+                        Sale sale = CreateSale(salesPoint, userId, new List<SaleData> { saleData }, productIdAmount);
                         dbContext.Sales.Add(sale);
                         dbContext.SaveChanges();
-
-                        if (userId != null)
-                        {
-                            Buyer buyer = dbContext.Buyers.Find(userId);
-                            if (buyer != null)
-                                buyer.SaleIds.Add(sale);
-                            else return false;
-                        }
 
                         return true;
                     };
@@ -65,11 +50,10 @@ namespace WebApi.Model
             return false;
         }
 
-        private Sale CreateSale(int salesPointId, int? bayerId, List<SaleData> salesData, float totalAmount)
+        private Sale CreateSale(SalesPoint salesPoint, int? bayerId, List<SaleData> salesData, float totalAmount)
         {
-            SalesPoint salesPoint = dbContext.GetSalesPoint(salesPointId);
-
             Buyer buyer = null;
+
             if (bayerId != null)
             {
                 buyer = dbContext.GetBuyer((int)bayerId);

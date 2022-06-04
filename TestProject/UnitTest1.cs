@@ -1,10 +1,12 @@
 using EntityFramework.Data;
 using EntityFramework.Data.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using WebApi.Controllers;
 
 namespace TestProject
 {
@@ -12,6 +14,8 @@ namespace TestProject
     public class UnitTest1
     {
         private MyDbContext context;
+        private MainController controller;
+
         private DateTime time;
         private DateTime date;
 
@@ -19,7 +23,28 @@ namespace TestProject
         public void Setup()
         {
             context = GetDbContext();
+            controller = new MainController(context);
             FillDb();
+        }
+
+        [TestMethod]
+        public void TestMainController()
+        {
+            var result1 = controller.Sale(null, 1, 5) as ObjectResult;
+
+            Assert.IsTrue((bool)result1.Value);
+            Assert.AreEqual(1, context.SalesPoints.Count());
+
+            Assert.AreEqual(5, context.SalesPoints.First().ProvidedProducts.First().ProductQuantity);
+            Assert.AreEqual(2, context.Sales.Count());
+            Assert.AreEqual(1, context.Buyers.First().SaleIds.Count);
+
+            var result2 = controller.Sale(1, 1, 2) as ObjectResult;
+
+            Assert.IsTrue((bool)result2.Value);
+            Assert.AreEqual(3, context.SalesPoints.First().ProvidedProducts.First().ProductQuantity);
+            Assert.AreEqual(3, context.Sales.Count());
+            Assert.AreEqual(2, context.Buyers.First().SaleIds.Count);
         }
 
         [TestMethod]
@@ -27,6 +52,7 @@ namespace TestProject
         {
             Assert.AreEqual(1, context.Buyers.Count());
             Assert.AreEqual("test buyer", context.Buyers.First().Name);
+            Assert.AreEqual(1, context.Buyers.First().SaleIds.Count);
 
             Assert.AreEqual(1, context.Products.Count());
             Assert.AreEqual("test product", context.Products.First().Name);
@@ -39,7 +65,6 @@ namespace TestProject
             Assert.AreEqual("test sales point", context.SalesPoints.First().Name);
             Assert.AreEqual(1, context.SalesPoints.First().ProvidedProducts.Count());
             Assert.AreEqual(context.ProvidedProducts.First(), context.SalesPoints.First().ProvidedProducts.First());
-
 
             Assert.AreEqual(1, context.SalesData.Count());
             Assert.AreEqual(context.Products.First(), context.SalesData.First().Product);
@@ -55,11 +80,7 @@ namespace TestProject
             Assert.AreEqual(context.SalesData.First(), context.Sales.First().SalesData.First());
         }
 
-        [TestMethod]
-        public void TestMainController()
-        {
-
-        }
+      
 
         private void FillDb()
         {

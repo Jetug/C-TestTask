@@ -1,55 +1,53 @@
-﻿using EntityFramework.Data.Tables;
+﻿
 using EntityFramework.Data;
+using EntityFramework.Data.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Linq;
+using WebApi.Helpers;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SalesController : ControllerBase
+    public class SalesController : Controller
     {
-        private readonly MyDbContext context;
+        private readonly ILogger<SalesController> logger;
+        private readonly CRUDHelper crud;
 
-        public SalesController(MyDbContext context)
+        public SalesController(MyDbContext context, ILogger<SalesController> logger)
         {
-            this.context = context;
+            this.logger = logger;
+            crud = new(this, context, logger, "Sales");
         }
 
         [HttpGet]
         [Route("all")]
-        public IActionResult GetAllGadtets()
+        public IActionResult GetAllSales()
         {
-            return Ok(context.GetTableByType(new Sale()).ToList());
+            return crud.Read<Sale>();
         }
 
         [HttpPost]
         [Route("add")]
         public IActionResult CreateSale(Sale model)
         {
-            context.AddNSave(model);
-            return Ok(model.Id);
+            return crud.Create(model);
         }
 
         [HttpPut]
         [Route("update")]
         public IActionResult UpdateSale(Sale model)
         {
-            context.UpdateNSave(model);
-            return NoContent();
+            return crud.Update(model);
         }
 
         [HttpDelete]
         [Route("delete/{id}")]
         public IActionResult DeleteSale(int id)
         {
-            var model = context.Sales.Find(id);
-            if (model == null)
-                return NotFound();
-
-            context.DeleteNSave(model);
-            return NoContent();
+            return crud.Delete<Sale>(id);
         }
     }
 }

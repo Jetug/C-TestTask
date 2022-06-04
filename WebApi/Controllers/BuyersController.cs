@@ -6,8 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EntityFramework.Data;
-using EntityFramework.Data.Tables;
 using Microsoft.Extensions.Logging;
+using EntityFramework.Data.Models;
+using WebApi.Helpers;
 
 namespace WebApi.Controllers
 {
@@ -15,46 +16,39 @@ namespace WebApi.Controllers
     [Route("[controller]")]
     public class BuyersController : Controller
     {
-        private readonly MyDbContext context;
+        private readonly CRUDHelper crud;
 
-        public BuyersController(MyDbContext context)
+        public BuyersController(MyDbContext context, ILogger<BuyersController> logger)
         {
-            this.context = context;
+            crud = new(this, context, logger, "Buyers");
         }
 
         [HttpGet]
         [Route("all")]
         public IActionResult GetAllBuyers()
         {
-            return Ok(context.GetTableByType(new Buyer()).ToList());
+            return crud.Read<Buyer>();
         }
 
         [HttpPost]
         [Route("add")]
         public IActionResult CreateBuyer(Buyer model)
         {
-            context.AddNSave(model);
-            return Ok(model.Id);
+            return crud.Create(model);
         }
 
         [HttpPut]
         [Route("update")]
         public IActionResult UpdateBuyer(Buyer model)
         {
-            context.UpdateNSave(model);
-            return NoContent();
+            return crud.Update(model);
         }
 
         [HttpDelete]
         [Route("delete/{id}")]
         public IActionResult DeleteBuyer(int id)
         {
-            var model = context.Buyers.Find(id);
-            if (model == null)
-                return NotFound();
-
-            context.DeleteNSave(model);
-            return NoContent();
+            return crud.Delete<Buyer>(id);
         }
     }
 }

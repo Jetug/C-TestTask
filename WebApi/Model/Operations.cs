@@ -1,5 +1,5 @@
 ﻿using EntityFramework.Data;
-using EntityFramework.Data.Tables;
+using EntityFramework.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;

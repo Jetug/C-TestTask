@@ -1,4 +1,4 @@
-﻿using EntityFramework.Data.Tables;
+﻿using EntityFramework.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

@@ -1,4 +1,4 @@
-﻿using EntityFramework.Data.Tables;
+﻿using EntityFramework.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,6 +10,8 @@ namespace EntityFramework.Data
 {
     public class MyDbContext : DbContext
     {
+        private struct TokenOf<X> { };
+
         public DbSet<Product> Products { get; set; }
         public DbSet<SalesPoint> SalesPoints { get; set; }
         public DbSet<Buyer> Buyers { get; set; }
@@ -19,9 +21,8 @@ namespace EntityFramework.Data
 
         public MyDbContext(DbContextOptions options) : base(options){}
 
-        public DbSet<T> GetTableByType<T>(T model) where T : class
-        {
-            return model switch
+        public DbSet<T> GetTable<T>(T model) where T : class =>
+            model switch
             {
                 Product => Products as DbSet<T>,
                 Buyer => Buyers as DbSet<T>,
@@ -31,7 +32,19 @@ namespace EntityFramework.Data
                 SalesPoint => SalesPoints as DbSet<T>,
                 _ => null,
             };
-        }
+
+
+        public DbSet<T> GetTable<T>() where T : class =>
+            default(TokenOf<T>) switch
+            {
+                TokenOf<Product> => Products as DbSet<T>,
+                TokenOf<Buyer> => Buyers as DbSet<T>,
+                TokenOf<Sale> => Sales as DbSet<T>,
+                TokenOf<ProvidedProduct> => ProvidedProducts as DbSet<T>,
+                TokenOf<SaleData> => SalesData as DbSet<T>,
+                TokenOf<SalesPoint> => SalesPoints as DbSet<T>,
+                _ => null,
+            };
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -40,19 +53,19 @@ namespace EntityFramework.Data
 
         public void AddNSave<T>(T model) where T : class
         {
-            GetTableByType(model).Add(model);
+            GetTable<T>().Add(model);
             SaveChanges();
         }
 
         public void UpdateNSave<T>(T model) where T : class
         {
-            GetTableByType(model).Update(model);
+            GetTable<T>().Update(model);
             SaveChanges();
         }
 
         public void DeleteNSave<T>(T model) where T : class
         {
-            GetTableByType(model).Remove(model);
+            GetTable<T>().Remove(model);
             SaveChanges();
         }
 

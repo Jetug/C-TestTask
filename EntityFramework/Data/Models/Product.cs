@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EntityFramework.Data.Tables
+namespace EntityFramework.Data.Models
 {
-    public class Product
+    public class Product : IIdEntity
     {
         public Product(){}
 

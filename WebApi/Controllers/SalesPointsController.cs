@@ -1,54 +1,52 @@
-﻿using EntityFramework.Data.Tables;
+﻿
 using EntityFramework.Data;
+using EntityFramework.Data.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Linq;
+using WebApi.Helpers;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SalesPointsController : ControllerBase
+    public class SalesPointsController : Controller
     {
-        private readonly MyDbContext context;
+        private readonly ILogger<SalesPointsController> logger;
+        private readonly CRUDHelper crud;
 
-        public SalesPointsController(MyDbContext context)
+        public SalesPointsController(MyDbContext context, ILogger<SalesPointsController> logger)
         {
-            this.context = context;
+            this.logger = logger;
+            crud = new(this, context, logger, "SalesPoints");
         }
 
         [HttpGet]
         [Route("all")]
-        public IActionResult GetAllGadtets()
+        public IActionResult GetAllSalesPoints()
         {
-            return Ok(context.GetTableByType(new SalesPoint()).ToList());
+            return crud.Read<SalesPoint>();
         }
 
         [HttpPost]
         [Route("add")]
         public IActionResult CreateSalesPoint(SalesPoint model)
         {
-            context.AddNSave(model);
-            return Ok(model.Id);
+            return crud.Create(model);
         }
 
         [HttpPut]
         [Route("update")]
         public IActionResult UpdateSalesPoint(SalesPoint model)
         {
-            context.UpdateNSave(model);
-            return NoContent();
+            return crud.Update(model);
         }
 
         [HttpDelete]
         [Route("delete/{id}")]
         public IActionResult DeleteSalesPoint(int id)
         {
-            var model = context.SalesPoints.Find(id);
-            if (model == null)
-                return NotFound();
-
-            context.DeleteNSave(model);
-            return NoContent();
+            return crud.Delete<SalesPoint>(id);
         }
     }
 }

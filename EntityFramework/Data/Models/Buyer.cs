@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EntityFramework.Data.Tables
+namespace EntityFramework.Data.Models
 {
-    public class Buyer
+    public class Buyer : IIdEntity
     {
         public Buyer() { }
 

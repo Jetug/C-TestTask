@@ -1,55 +1,53 @@
-﻿using EntityFramework.Data.Tables;
+﻿
 using EntityFramework.Data;
+using EntityFramework.Data.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Linq;
+using WebApi.Helpers;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProvidedProductsController : ControllerBase
+    public class ProvidedProductsController : Controller
     {
-        private readonly MyDbContext context;
+        private readonly ILogger<ProvidedProductsController> logger;
+        private readonly CRUDHelper crud;
 
-        public ProvidedProductsController(MyDbContext context)
+        public ProvidedProductsController(MyDbContext context, ILogger<ProvidedProductsController> logger)
         {
-            this.context = context;
+            this.logger = logger;
+            crud = new(this, context, logger, "ProvidedProducts");
         }
 
         [HttpGet]
         [Route("all")]
-        public IActionResult GetAllGadtets()
+        public IActionResult GetAllProvidedProducts()
         {
-            return Ok(context.GetTableByType(new ProvidedProduct()).ToList());
+            return crud.Read<ProvidedProduct>();
         }
 
         [HttpPost]
         [Route("add")]
         public IActionResult CreateProvidedProduct(ProvidedProduct model)
         {
-            context.AddNSave(model);
-            return Ok(model.Id);
+            return crud.Create(model);
         }
 
         [HttpPut]
         [Route("update")]
         public IActionResult UpdateProvidedProduct(ProvidedProduct model)
         {
-            context.UpdateNSave(model);
-            return NoContent();
+            return crud.Update(model);
         }
 
         [HttpDelete]
         [Route("delete/{id}")]
         public IActionResult DeleteProvidedProduct(int id)
         {
-            var model = context.ProvidedProducts.Find(id);
-            if (model == null)
-                return NotFound();
-
-            context.DeleteNSave(model);
-            return NoContent();
+            return crud.Delete<ProvidedProduct>(id);
         }
     }
 }

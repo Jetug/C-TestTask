@@ -1,54 +1,52 @@
-﻿using EntityFramework.Data.Tables;
+﻿
 using EntityFramework.Data;
+using EntityFramework.Data.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Linq;
+using WebApi.Helpers;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductsController : ControllerBase
+    public class ProductsController : Controller
     {
-        private readonly MyDbContext context;
+        private readonly ILogger<ProductsController> logger;
+        private readonly CRUDHelper crud;
 
-        public ProductsController(MyDbContext context)
+        public ProductsController(MyDbContext context, ILogger<ProductsController> logger)
         {
-            this.context = context;
+            this.logger = logger;
+            crud = new(this, context, logger, "Products");
         }
 
         [HttpGet]
         [Route("all")]
-        public IActionResult GetAllGadtets()
+        public IActionResult GetAllProducts()
         {
-            return Ok(context.GetTableByType(new Product()).ToList());
+            return crud.Read<Product>();
         }
 
         [HttpPost]
         [Route("add")]
         public IActionResult CreateProduct(Product model)
         {
-            context.AddNSave(model);
-            return Ok(model.Id);
+            return crud.Create(model);
         }
 
         [HttpPut]
         [Route("update")]
         public IActionResult UpdateProduct(Product model)
         {
-            context.UpdateNSave(model);
-            return NoContent();
+            return crud.Update(model);
         }
 
         [HttpDelete]
         [Route("delete/{id}")]
         public IActionResult DeleteProduct(int id)
         {
-            var model = context.Products.Find(id);
-            if (model == null)
-                return NotFound();
-
-            context.DeleteNSave(model);
-            return NoContent();
+            return crud.Delete<Product>(id);
         }
     }
 }

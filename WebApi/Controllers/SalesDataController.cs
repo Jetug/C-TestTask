@@ -1,55 +1,53 @@
-﻿using EntityFramework.Data.Tables;
+﻿
 using EntityFramework.Data;
+using EntityFramework.Data.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Linq;
+using WebApi.Helpers;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SalesDataController : ControllerBase
+    public class SalesDataController : Controller
     {
-        private readonly MyDbContext context;
+        private readonly ILogger<SalesDataController> logger;
+        private readonly CRUDHelper crud;
 
-        public SalesDataController(MyDbContext context)
+        public SalesDataController(MyDbContext context, ILogger<SalesDataController> logger)
         {
-            this.context = context;
+            this.logger = logger;
+            crud = new(this, context, logger, "SalesData");
         }
 
         [HttpGet]
         [Route("all")]
-        public IActionResult GetAllGadtets()
+        public IActionResult GetAllSaleData()
         {
-            return Ok(context.GetTableByType(new SaleData()).ToList());
+            return crud.Read<SaleData>();
         }
 
         [HttpPost]
         [Route("add")]
         public IActionResult CreateSaleData(SaleData model)
         {
-            context.AddNSave(model);
-            return Ok(model.Id);
+            return crud.Create(model);
         }
 
         [HttpPut]
         [Route("update")]
         public IActionResult UpdateSaleData(SaleData model)
         {
-            context.UpdateNSave(model);
-            return NoContent();
+            return crud.Update(model);
         }
 
         [HttpDelete]
         [Route("delete/{id}")]
         public IActionResult DeleteSaleData(int id)
         {
-            var model = context.SalesData.Find(id);
-            if (model == null)
-                return NotFound();
-
-            context.DeleteNSave(model);
-            return NoContent();
+            return crud.Delete<SaleData>(id);
         }
     }
 }

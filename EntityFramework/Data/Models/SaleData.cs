@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EntityFramework.Data.Tables
+namespace EntityFramework.Data.Models
 {
-    public class SaleData
+    public class SaleData : IIdEntity
     {
         public SaleData(){}
 

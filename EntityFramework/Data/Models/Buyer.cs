@@ -10,7 +10,7 @@ namespace EntityFramework.Data.Models
     {
         public Buyer() { }
 
-        public Buyer(string name, List<Sale> saleIds)
+        public Buyer(string name, List<Sale> saleIds = null)
         {
             Name = name;
             SaleIds = saleIds;

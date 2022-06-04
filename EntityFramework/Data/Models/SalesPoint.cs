@@ -10,7 +10,7 @@ namespace EntityFramework.Data.Models
     {
         public SalesPoint(){}
 
-        public SalesPoint(string name, List<ProvidedProduct> providedProducts)
+        public SalesPoint(string name, List<ProvidedProduct> providedProducts = null)
         {
             Name = name;
             ProvidedProducts = providedProducts;

@@ -28,7 +28,7 @@ namespace WebApi.Helpers
 
             if(list == null)
             {
-                logger.LogInformation(name + ": get all - fail");
+                logger.LogWarning(name + ": get all - fail");
                 return controller.NotFound();
             }
 
@@ -46,7 +46,8 @@ namespace WebApi.Helpers
                 logger.LogInformation(name + ": create - success");
                 return controller.Ok(model.Id);
             }
-            logger.LogInformation(name + ": create - fail");
+
+            logger.LogWarning(name + ": create - fail");
             return controller.NotFound();
         }
 
@@ -61,7 +62,7 @@ namespace WebApi.Helpers
                 return controller.NoContent();
             }
 
-            logger.LogInformation(name + ": update - fail");
+            logger.LogWarning(name + ": update - fail");
             return controller.NotFound();
         }    
 
@@ -72,7 +73,7 @@ namespace WebApi.Helpers
 
             if (model == null)
             {
-                logger.LogInformation(name + ": delete - fail");
+                logger.LogWarning(name + ": delete - fail");
                 return controller.NotFound();
             }
 

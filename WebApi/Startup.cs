@@ -70,8 +70,7 @@ namespace WebApi
 
         public static void GenerateTestData(MyDbContext context)
         {
-            var generator = new DataGenerator(context);
-            generator.Run();
+            new DataGenerator(context).Run();
         }
     }
 }

@@ -36,18 +36,12 @@ namespace EntityFramework.Data
             context.SaveChanges();
         }
 
-        private void Detach(object item)
-        {
-            //context.Entry(item).State = EntityState.Added;
-        }
-
         private void LoadProducts()
         {
             Load(() =>
             {
                 var product = new Product($"Product {random.Next(1000)}", random.Next(1000));
                 context.Products.Add(product);
-                Detach(product);
             });
         }
 
@@ -58,7 +52,6 @@ namespace EntityFramework.Data
                 Product product = getRandomProduct();
                 var item = new ProvidedProduct(product, random.Next(1000));
                 context.ProvidedProducts.Add(item);
-                Detach(item);
             });
         }
 
@@ -69,7 +62,6 @@ namespace EntityFramework.Data
                 Product product = getRandomProduct();
                 var item = new SaleData(product, random.Next(1000), random.Next(10000));
                 context.SalesData.Add(item);
-                Detach(item);
             });
         }
 
@@ -80,7 +72,6 @@ namespace EntityFramework.Data
                 var providedProducts = GetRandomProvidedProducts();
                 var item = new SalesPoint($"SalesPoint {random.Next(1000)}", providedProducts);
                 context.SalesPoints.Add(item);
-                Detach(item);
             });
         }
 
@@ -91,7 +82,6 @@ namespace EntityFramework.Data
                 SalesPoint salesPoint = context.SalesPoints.Find(random.Next(quantity));
                 var item = new Sale(DateTime.Today, DateTime.Now, salesPoint, buyer, GetRandomSalesData(), random.Next(10000));
                 context.Sales.Add(item);
-                Detach(item);
             });
         }
 
@@ -101,8 +91,6 @@ namespace EntityFramework.Data
             {
                 var item = new Buyer($"Buyer {random.Next(1000)}", GetRandomSales());
                 context.Buyers.Add(item);
-                //context.Entry<Buyer>(item).State = EntityState.Added;
-                //Detach(item);
             });
         }
 
